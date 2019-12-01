@@ -1,0 +1,32 @@
+{
+  "name": "advent-of-code",
+  "version": "0.0.1",
+  "description": "solutions (?) for adventofcode.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "ts-node": "ts-node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jdpearce/advent-of-code.git"
+  },
+  "keywords": [
+    "advent",
+    "code"
+  ],
+  "author": "jo@nrwl.io",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jdpearce/advent-of-code/issues"
+  },
+  "homepage": "https://github.com/jdpearce/advent-of-code#readme",
+  "dependencies": {
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.14",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.2"
+  }
+}
