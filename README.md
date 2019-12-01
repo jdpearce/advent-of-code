@@ -1,5 +1,7 @@
 # Advent of Code Solutions
 
+[![Build Status](https://travis-ci.com/jdpearce/advent-of-code.svg?branch=master)](https://travis-ci.com/jdpearce/advent-of-code)
+
 ## Running Solutions
 
 To run any of the solution files in this repo (after running `npm install`):
