@@ -1,4 +1,7 @@
+import readlineSync from 'readline-sync';
 import { getInstructions, runIntCode } from './lib';
+
+jest.mock('readline-sync');
 
 describe('2019-12-05.1', () => {
   const tests = [
@@ -24,9 +27,24 @@ describe('2019-12-05.1', () => {
     ]
   ];
 
+  beforeEach(() => {
+    jest.spyOn(global.console, 'log').mockImplementation(() => {});
+  });
+
   tests.forEach(([input, expected]) => {
     test(`for input ${input} expect ${expected}`, () => {
       expect(runIntCode(input)).toEqual(expected);
+    });
+  });
+
+  describe('Input and Output', () => {
+    const program = [3, 0, 4, 0, 99];
+
+    test('outputs the input', () => {
+      const input = 5;
+      (readlineSync as any).questionInt.mockImplementation(() => input);
+      runIntCode(program);
+      expect(global.console.log).toHaveBeenCalledWith(input);
     });
   });
 

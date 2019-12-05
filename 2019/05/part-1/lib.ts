@@ -45,7 +45,7 @@ export const opCodeFunctions: {
   },
 
   3: (program: number[], pointer: number) => {
-    const input = readlineSync.questionInt('Please provide input:'); // TODO : not testable as is...
+    const input = readlineSync.questionInt('Please provide input:');
     writeValue(program, pointer + 1, input);
     return pointer + 2;
   },
