@@ -88,13 +88,13 @@ describe('2019-12-05.2', () => {
     programs.forEach(program => {
       test('0 when input is zero', () => {
         (readlineSync as any).questionInt.mockImplementation(() => 0);
-        runIntCode(program);
+        runIntCode([...program]);
         expect(global.console.log).toHaveBeenCalledWith(0);
       });
 
       test('1 when input is not zero', () => {
         (readlineSync as any).questionInt.mockImplementation(() => 1);
-        runIntCode(program);
+        runIntCode([...program]);
         expect(global.console.log).toHaveBeenCalledWith(1);
       });
     });
