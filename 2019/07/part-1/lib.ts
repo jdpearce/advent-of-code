@@ -118,3 +118,35 @@ export function runIntCode(state: ProgramState): ProgramState {
   }
   return state;
 }
+
+/**
+ * Using Heap's Algorithm to find permutations
+ * https://en.wikipedia.org/wiki/Heap%27s_algorithm
+ *
+ * @param k
+ * @param a
+ */
+export function generate<T>(k: number, a: T[], output: T[][]) {
+  if (k === 1) {
+    output.push([...a]);
+    return;
+  }
+
+  generate(k - 1, a, output);
+
+  // Generate permutations for kth swapped with each k-1 initial
+  for (let i = 0; i < k - 1; i++) {
+    if (k % 2 === 0) {
+      swap(a, i, k - 1);
+    } else {
+      swap(a, 0, k - 1);
+    }
+    generate(k - 1, a, output);
+  }
+}
+
+export function swap(a: any[], first: number, second: number) {
+  const tmp = a[first];
+  a[first] = a[second];
+  a[second] = tmp;
+}
