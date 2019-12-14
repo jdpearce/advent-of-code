@@ -51,8 +51,11 @@ export function toRecipeBook(recipes: Recipe[]): RecipeBook {
  *
  * @param recipeBook
  */
-export function getRequiredOre(recipeBook: RecipeBook): number {
-  const required: { [name: string]: number } = { FUEL: 1 };
+export function getRequiredOre(
+  recipeBook: RecipeBook,
+  fuelAmount: number = 1
+): number {
+  const required: { [name: string]: number } = { FUEL: fuelAmount };
 
   while (Object.keys(required).some(x => required[x] > 0 && x !== 'ORE')) {
     let need: Material[] = Object.keys(required)
