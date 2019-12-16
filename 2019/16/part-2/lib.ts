@@ -1,3 +1,5 @@
+import { calculateFFTPhase } from '../part-1/lib';
+
 /**
  * Since the offset is likely to be large, that means
  * all the values before will be multiplied by zero
@@ -26,4 +28,21 @@ export function calculateMessage(input: number[]): string {
   }
 
   return output.slice(0, 8).join('');
+}
+
+/**
+ * This version takes many, many minutes to run. Never ever try it.
+ *
+ * @param input
+ */
+export function naiveCalculation(input: number[]): string {
+  let offset = Number(input.slice(0, 7).join(''));
+  let full = [];
+  for (let i = 0; i < 10000; i++) {
+    full.push(...input);
+  }
+
+  let output = calculateFFTPhase(full, 100);
+
+  return output.slice(offset, offset + 8).join('');
 }

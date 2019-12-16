@@ -8,4 +8,6 @@ const transmission = input
   .split('')
   .map(Number);
 
+let start = Date.now();
 console.log(`The final message is ${calculateMessage(transmission)}`);
+console.log(`Time taken = ${Date.now() - start}ms`);
