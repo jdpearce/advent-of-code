@@ -7,16 +7,14 @@
 To run any of the solution files in this repo (after running `npm install`):
 
 ```bash
-npm run ts-node <solution-file>
+npm start <solution-file>
 ```
 
 e.g.
 
 ```bash
-npm run ts-node 2019/01/part-1/main.ts
+npm start 2019/01/part-1/main.ts
 ```
-
-You can omit typing `npm` by installing `ts-node` globally, or just using `npx` if you prefer.
 
 ## Running Test Specs
 
