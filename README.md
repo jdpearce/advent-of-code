@@ -29,3 +29,9 @@ Or simply
 ```bash
 jest
 ```
+
+To run tests for a single spec:
+
+```bash
+npm test -- --t="2020-12-01.1"
+```
