@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["node", "jest"],
-    "lib": ["es2018"],
+    "lib": ["es2018", "dom", "esnext"],
     "declaration": true
   },
   "exclude": ["build"]
