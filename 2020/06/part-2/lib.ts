@@ -6,22 +6,19 @@ export function sumOfCounts(input: string): number {
   }, 0);
 }
 
-export const intersection = (set: Set<string>, array: string[]) =>
-  new Set(array.filter((x) => set.has(x)));
+export const intersection = (set1: Set<string>, set2: Set<string>) =>
+  new Set([...set2].filter((x) => set1.has(x)));
 
 export function numberOfQuestions(group: string): number {
-  let set = new Set<string>();
+  return group
+    .split('\n')
+    .filter((x) => x)
+    .map((line) => new Set(line.split('')))
+    .reduce((prev, curr) => {
+      if (!prev) {
+        return curr;
+      }
 
-  const lines = group.split('\n').filter((x) => !!x);
-  for (let i = 0; i < lines.length; i++) {
-    const chars = lines[i].split('');
-    if (i === 0) {
-      chars.forEach((char) => set.add(char));
-      continue;
-    }
-
-    set = intersection(set, chars);
-  }
-
-  return set.size;
+      return intersection(prev, curr);
+    }, null).size;
 }

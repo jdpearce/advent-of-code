@@ -42,7 +42,7 @@ a`;
 
   it('intersection should work', () => {
     const first = new Set(['a', 'b', 'c']);
-    const second = ['a', 'b', 'd'];
+    const second = new Set(['a', 'b', 'd']);
     expect(intersection(first, second)).toEqual(new Set(['a', 'b']));
   });
 });
