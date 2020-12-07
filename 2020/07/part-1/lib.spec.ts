@@ -1,4 +1,4 @@
-import { getBagCount, parseRules } from './lib';
+import { getBagCount, parseRules, Rules } from './lib';
 
 describe('2020-12-07.1', () => {
   const input = `light red bags contain 1 bright white bag, 2 muted yellow bags.
@@ -16,7 +16,7 @@ dotted black bags contain no other bags.`;
 dark orange bags contain 3 bright white bags, 4 muted yellow bags.
 faded blue bags contain no other bags.`;
 
-    const expected = {
+    const expected: Rules = {
       'faded blue': {
         inside: {},
         outside: new Set(),

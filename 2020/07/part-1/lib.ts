@@ -1,14 +1,18 @@
 export function getBagCount(input: string, color: string): number {
   const rules = parseRules(input);
 
-  const set = new Set();
+  const set = new Set<string>();
   countContainers(rules, color, set);
 
   return set.size;
 }
 
-export function parseRules(input: string) {
-  const rules = {};
+export interface Rules {
+  [color: string]: { inside: { [color: string]: number }; outside: Set<string> };
+}
+
+export function parseRules(input: string): Rules {
+  const rules: Rules = {};
 
   input
     .split('\n')
@@ -39,7 +43,7 @@ export function parseRules(input: string) {
   return rules;
 }
 
-export function countContainers(rules, color, set) {
+export function countContainers(rules: Rules, color: string, set: Set<string>) {
   for (const outer of rules[color].outside.keys()) {
     set.add(outer);
     countContainers(rules, outer, set);
