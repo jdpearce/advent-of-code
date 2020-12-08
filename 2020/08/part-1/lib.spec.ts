@@ -12,6 +12,6 @@ jmp -4
 acc +6`;
 
   it('should recognise an infinite loop where acc = 5', () => {
-    expect(runCode(input)).toBe(5);
+    expect(runCode(input).accumulator).toBe(5);
   });
 });
