@@ -3,23 +3,23 @@ export function findContiguousRange(input: number[], target: number): number[] {
   let end = 0;
   let sum = 0;
   let found = false;
-  while (!found) {
-    if (start === end && end === input.length - 1) {
-      throw Error('argh');
+
+  for (end = start; end < input.length; end++) {
+    if (sum === target) {
+      found = true;
+      break;
     }
 
-    sum = 0;
-    for (end = start; end < input.length; end++) {
-      sum += input[end];
-      if (sum === target) {
-        found = true;
-        break;
-      }
-      if (sum > target) {
-        start++;
-        break;
+    sum += input[end];
+
+    if (sum > target) {
+      sum -= input[start];
+      start++;
+      for (; end > start && sum > target; end--) {
+        sum -= input[end];
       }
     }
   }
-  return input.slice(start, end + 1);
+
+  return input.slice(start, end);
 }
