@@ -9,3 +9,6 @@ const numbers = input
   .map(Number);
 
 console.log(`Number of arrangements is ${numberOfArrangements(numbers)}`);
+
+console.log('...and via tribonacci:');
+console.log(`Number of arrangements is ${numberOfArrangements(numbers)}`);

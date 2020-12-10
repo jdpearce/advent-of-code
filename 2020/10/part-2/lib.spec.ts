@@ -1,4 +1,4 @@
-import { numberOfArrangements } from './lib';
+import { numberOfArrangements, numberOfArrangements2 } from './lib';
 
 describe('2020-12-10.2', () => {
   const input = `16
@@ -45,19 +45,39 @@ describe('2020-12-10.2', () => {
 10
 3`;
 
-  it('should calculate the number of arrangments', () => {
-    let numbers = input
-      .split('\n')
-      .filter((x) => x)
-      .map(Number);
+  describe('numberOfArrangements', () => {
+    it('should calculate the number of arrangments', () => {
+      let numbers = input
+        .split('\n')
+        .filter((x) => x)
+        .map(Number);
 
-    expect(numberOfArrangements(numbers)).toBe(8);
+      expect(numberOfArrangements(numbers)).toBe(8);
 
-    numbers = large_input
-      .split('\n')
-      .filter((x) => x)
-      .map(Number);
+      numbers = large_input
+        .split('\n')
+        .filter((x) => x)
+        .map(Number);
 
-    expect(numberOfArrangements(numbers)).toBe(19208);
+      expect(numberOfArrangements(numbers)).toBe(19208);
+    });
+  });
+
+  describe('numberOfArrangements2', () => {
+    it('should calculate the number of arrangments', () => {
+      let numbers = input
+        .split('\n')
+        .filter((x) => x)
+        .map(Number);
+
+      expect(numberOfArrangements2(numbers)).toBe(8);
+
+      numbers = large_input
+        .split('\n')
+        .filter((x) => x)
+        .map(Number);
+
+      expect(numberOfArrangements2(numbers)).toBe(19208);
+    });
   });
 });
