@@ -1,3 +1,9 @@
+export enum SeatState {
+  Floor = '.',
+  Occupied = '#',
+  Empty = 'L',
+}
+
 export function calcNextRound(seats: string[][]): string[][] {
   const output = [];
 
@@ -24,17 +30,17 @@ export function calcNextRound(seats: string[][]): string[][] {
           continue;
         }
 
-        if (seats[y1][x1] === '#') {
+        if (seats[y1][x1] === SeatState.Occupied) {
           adjacentSeats++;
         }
       }
 
       const seat = seats[y][x];
 
-      if (seat === 'L' && adjacentSeats === 0) {
-        output[y][x] = '#';
-      } else if (seat === '#' && adjacentSeats > 3) {
-        output[y][x] = 'L';
+      if (seat === SeatState.Empty && adjacentSeats === 0) {
+        output[y][x] = SeatState.Occupied;
+      } else if (seat === SeatState.Occupied && adjacentSeats > 3) {
+        output[y][x] = SeatState.Empty;
       }
     }
   }
@@ -64,7 +70,7 @@ export function calcOccupiedSeatsWhenStable(
   let occupied = 0;
   for (let y = 0; y < seats.length; y++) {
     for (let x = 0; x < seats[y].length; x++) {
-      if (seats[y][x] === '#') {
+      if (seats[y][x] === SeatState.Occupied) {
         occupied++;
       }
     }
