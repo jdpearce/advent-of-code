@@ -4,6 +4,17 @@ export enum SeatState {
   Empty = 'L',
 }
 
+export const directions = [
+  [+1, 0],
+  [+1, +1],
+  [0, +1],
+  [-1, +1],
+  [-1, 0],
+  [-1, -1],
+  [0, -1],
+  [+1, -1],
+];
+
 export function calcNextRound(seats: string[][]): string[][] {
   const output = [];
 
@@ -13,19 +24,9 @@ export function calcNextRound(seats: string[][]): string[][] {
     for (let x = 0; x < row.length; x++) {
       output[y][x] = seats[y][x];
 
-      const adjacent = [
-        [x + 1, y],
-        [x + 1, y + 1],
-        [x, y + 1],
-        [x - 1, y + 1],
-        [x - 1, y],
-        [x - 1, y - 1],
-        [x, y - 1],
-        [x + 1, y - 1],
-      ];
-
       let adjacentSeats = 0;
-      for (const [x1, y1] of adjacent) {
+      for (const [dx, dy] of directions) {
+        const [x1, y1] = [x + dx, y + dy];
         if (x1 < 0 || y1 < 0 || y1 === seats.length || x1 === row.length) {
           continue;
         }
@@ -36,7 +37,6 @@ export function calcNextRound(seats: string[][]): string[][] {
       }
 
       const seat = seats[y][x];
-
       if (seat === SeatState.Empty && adjacentSeats === 0) {
         output[y][x] = SeatState.Occupied;
       } else if (seat === SeatState.Occupied && adjacentSeats > 3) {

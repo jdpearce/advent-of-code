@@ -1,4 +1,4 @@
-import { SeatState } from '../part-1/lib';
+import { directions, SeatState } from '../part-1/lib';
 
 export function isDirectionOccupied(
   seats: string[][],
@@ -27,16 +27,6 @@ export function isDirectionOccupied(
 
 export function calcNextRound(seats: string[][]): string[][] {
   const output = [];
-  const directions = [
-    [+1, 0],
-    [+1, +1],
-    [0, +1],
-    [-1, +1],
-    [-1, 0],
-    [-1, -1],
-    [0, -1],
-    [+1, -1],
-  ];
 
   for (let y = 0; y < seats.length; y++) {
     const row = seats[y];
@@ -55,7 +45,6 @@ export function calcNextRound(seats: string[][]): string[][] {
       }
 
       const seat = seats[y][x];
-
       if (seat === SeatState.Empty && adjacentSeats === 0) {
         output[y][x] = SeatState.Occupied;
       } else if (seat === SeatState.Occupied && adjacentSeats > 4) {
