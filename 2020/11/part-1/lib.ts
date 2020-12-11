@@ -15,6 +15,13 @@ export const directions = [
   [+1, -1],
 ];
 
+export function toGrid(input: string): string[][] {
+  return input
+    .split('\n')
+    .filter((x) => x)
+    .map((r) => r.split(''));
+}
+
 export function calcNextRound(seats: string[][]): string[][] {
   const output = [];
 
@@ -52,10 +59,7 @@ export function calcOccupiedSeatsWhenStable(
   input: string,
   calcNextRound: (seats: string[][]) => string[][]
 ): number {
-  let seats = input
-    .split('\n')
-    .filter((x) => x)
-    .map((r) => r.split(''));
+  let seats = toGrid(input);
 
   let stable = false;
   while (!stable) {

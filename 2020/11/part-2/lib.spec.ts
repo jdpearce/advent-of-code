@@ -1,4 +1,4 @@
-import { calcOccupiedSeatsWhenStable } from '../part-1/lib';
+import { calcOccupiedSeatsWhenStable, directions, toGrid } from '../part-1/lib';
 import { calcNextRound, isDirectionOccupied } from './lib';
 
 describe('2020-12-11.2', () => {
@@ -40,23 +40,10 @@ LLLLLLLLL#
   });
 
   it('should calculate each round correctly', () => {
-    const round0_array = input
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-    const round1_array = round1
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-    const round2_array = round2
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-
+    const round0_array = toGrid(input);
+    const round1_array = toGrid(round1);
+    const round2_array = toGrid(round2);
     expect(calcNextRound(round0_array)).toEqual(round1_array);
-
-    const actual = calcNextRound(round1_array);
-    // console.log(actual.map((r) => r.join('')).join('\n'));
     expect(calcNextRound(round1_array)).toEqual(round2_array);
   });
 
@@ -71,22 +58,7 @@ LLLLLLLLL#
 #........
 ...#.....`;
 
-    let seats = test
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-
-    const directions = [
-      [+1, 0],
-      [+1, +1],
-      [0, +1],
-      [-1, +1],
-      [-1, 0],
-      [-1, -1],
-      [0, -1],
-      [+1, -1],
-    ];
-
+    let seats = toGrid(test);
     directions.forEach(([dx, dy]) => {
       expect(isDirectionOccupied(seats, [3, 4], [dx, dy])).toBe(true);
     });
@@ -99,11 +71,7 @@ LLLLLLLLL#
 #.#.#.#
 .##.##.`;
 
-    seats = test2
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-
+    seats = toGrid(test2);
     directions.forEach(([dx, dy]) => {
       expect(isDirectionOccupied(seats, [3, 3], [dx, dy])).toBe(false);
     });
@@ -112,11 +80,7 @@ LLLLLLLLL#
 .L.L.#.#.#.#.
 .............`;
 
-    seats = test3
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-
+    seats = toGrid(test3);
     directions.forEach(([dx, dy]) => {
       expect(isDirectionOccupied(seats, [1, 1], [dx, dy])).toBe(false);
     });

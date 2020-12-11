@@ -1,4 +1,4 @@
-import { arePlansEqual, calcNextRound, calcOccupiedSeatsWhenStable } from './lib';
+import { arePlansEqual, calcNextRound, calcOccupiedSeatsWhenStable, toGrid } from './lib';
 
 describe('2020-12-11.1', () => {
   const input = `L.LL.LL.LL
@@ -35,21 +35,10 @@ L.L.L..L..
 #.#LLLL.##`;
 
   it('should calculate each round correctly', () => {
-    const round0_array = input
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-    const round1_array = round1
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-    const round2_array = round2
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-
+    const round0_array = toGrid(input);
+    const round1_array = toGrid(round1);
+    const round2_array = toGrid(round2);
     expect(calcNextRound(round0_array)).toEqual(round1_array);
-
     expect(calcNextRound(round1_array)).toEqual(round2_array);
   });
 
@@ -58,11 +47,9 @@ L.L.L..L..
   });
 
   it('should compare seating plans', () => {
-    const round0_array = input
-      .split('\n')
-      .filter((x) => x)
-      .map((r) => r.split(''));
-
+    const round0_array = toGrid(input);
+    const round1_array = toGrid(round1);
     expect(arePlansEqual(round0_array, round0_array)).toBe(true);
+    expect(arePlansEqual(round0_array, round1_array)).toBe(false);
   });
 });
