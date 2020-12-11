@@ -1,4 +1,4 @@
-import { numberOfArrangements, numberOfArrangements2 } from './lib';
+import { numberOfArrangements, numberOfArrangements2, numberOfArrangements3 } from './lib';
 
 describe('2020-12-10.2', () => {
   const input = `16
@@ -78,6 +78,24 @@ describe('2020-12-10.2', () => {
         .map(Number);
 
       expect(numberOfArrangements2(numbers)).toBe(19208);
+    });
+  });
+
+  describe('numberOfArrangements3', () => {
+    it('should calculate the number of arrangments', () => {
+      let numbers = input
+        .split('\n')
+        .filter((x) => x)
+        .map(Number);
+
+      expect(numberOfArrangements3(numbers)).toBe(8);
+
+      numbers = large_input
+        .split('\n')
+        .filter((x) => x)
+        .map(Number);
+
+      expect(numberOfArrangements3(numbers)).toBe(19208);
     });
   });
 });

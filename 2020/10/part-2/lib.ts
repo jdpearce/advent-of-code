@@ -75,3 +75,38 @@ export function numberOfArrangements2(numbers: number[]): number {
 
   return arrangements;
 }
+
+/**
+ * In this version we know that the number of arrangements at an index
+ * is the sum of the arrangements of the adapters -1, -2 and -3 away.
+ *
+ * e.g. [1, 2, 3, 4]
+ *
+ * At [4] we could connect to adapters with the values [1, 2, 3], so if
+ * we calculate for those, we can just add them up.
+ *
+ * If adapters with those values don't exist in the list, we just add 0.
+ *
+ * If we start at the bottom, we should be able to iterate through the list
+ * and calculate the number of arrangements cumulatively.
+ *
+ * @param input
+ */
+export function numberOfArrangements3(numbers: number[]): number {
+  const adapters = [...numbers];
+  adapters.sort((a, b) => a - b);
+  const max = adapters[adapters.length - 1] + 3;
+  const space = [0, ...adapters, max];
+
+  const values = new Map<number, number>([[0, 1]]);
+
+  for (let i = 1; i < space.length; i++) {
+    const current =
+      (values.get(space[i] - 1) || 0) +
+      (values.get(space[i] - 2) || 0) +
+      (values.get(space[i] - 3) || 0);
+    values.set(space[i], current);
+  }
+
+  return values.get(max);
+}
