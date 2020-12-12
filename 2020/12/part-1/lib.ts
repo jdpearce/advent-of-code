@@ -1,20 +1,48 @@
-export type Facing = 'N' | 'S' | 'E' | 'W';
-
+export interface Point {
+  x: number;
+  y: number;
+}
 export interface Position {
   x: number;
   y: number;
-  facing: Facing;
+  facing: Point;
 }
 
-const leftTurns = {
-  N: { 90: 'W', 180: 'S', 270: 'E' },
-  S: { 90: 'E', 180: 'N', 270: 'W' },
-  E: { 90: 'N', 180: 'W', 270: 'S' },
-  W: { 90: 'S', 180: 'E', 270: 'N' },
-};
+/**
+ * Use the standard rotation matrices
+ *
+ * 90 => [0 -1]
+ *       [1  0]
+ *
+ * 180 => [-1  0]
+ *        [ 0 -1]
+ *
+ * 270 => [ 0 1]
+ *        [-1 0]
+ *
+ * @param point
+ * @param angle
+ */
+export function rotate(point: Point, angle: number): Point {
+  switch (angle) {
+    case 90:
+      return {
+        x: -point.y,
+        y: point.x,
+      };
+    case 180:
+      return {
+        x: -point.x,
+        y: -point.y,
+      };
+    case 270:
+      return {
+        x: point.y,
+        y: -point.x,
+      };
+  }
 
-export function calcFacing(facing: Facing, value: number): Facing {
-  return leftTurns[facing][value];
+  return point;
 }
 
 export const actions = {
@@ -36,13 +64,17 @@ export const actions = {
   }),
   L: (value, current: Position): Position => ({
     ...current,
-    facing: calcFacing(current.facing, value),
+    facing: rotate(current.facing, value),
   }),
   R: (value, current: Position): Position => ({
     ...current,
-    facing: calcFacing(current.facing, 360 - value),
+    facing: rotate(current.facing, 360 - value),
   }),
-  F: (value, current: Position): Position => actions[current.facing](value, current),
+  F: (value, current: Position): Position => ({
+    ...current,
+    x: current.x + current.facing.x * value,
+    y: current.y + current.facing.y * value,
+  }),
 };
 
 export function processInstruction(instruction: string, current: Position): Position {
