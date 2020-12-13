@@ -1,32 +1,30 @@
+/**
+ * Iterate through the bus numbers and calculate the time after start time
+ * that it next departs. We can do this by calculating  busId - busId % startTime
+ * The mod operation gives us the remainder, we can then subtract this to find the
+ * number of minutes after startTime that is the next multiple of busId.
+ * @param input
+ */
 export function getDepartureTimeAndId(input: string): { time: number; id: number } {
-  const [earliest, buses] = input.split('\n').filter((x) => x);
-  const busIds = buses
+  const lines = input.split('\n').filter((x) => x);
+  const startTime = Number(lines[0]);
+  const busIds = lines[1]
     .split(',')
     .filter((bus) => bus !== 'x')
     .map(Number);
 
-  console.log(earliest, busIds);
-
-  const map = new Map<number, number>();
-  const max = Number(earliest) * 10;
-
-  for (let i = 0; i < busIds.length; i++) {
-    for (let j = busIds[i]; j < max; j += busIds[i]) {
-      map.set(j, busIds[i]);
+  let time = startTime;
+  let id = -1;
+  for (const busId of busIds) {
+    const waitingTime = busId - (startTime % busId);
+    if (waitingTime < time) {
+      time = waitingTime;
+      id = busId;
     }
   }
-
-  let i = Number(earliest);
-  for (; i < max; i++) {
-    if (map.has(i)) {
-      break;
-    }
-  }
-
-  // console.log(map);
 
   return {
-    time: i - Number(earliest),
-    id: map.get(i),
+    time,
+    id,
   };
 }
