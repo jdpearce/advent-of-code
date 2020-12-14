@@ -42,26 +42,25 @@ export function bitmask(value: string, mask: string): string[] {
     }
   }
 
-  const paths = [];
-  getPaths(result, 0, [], paths);
-  return paths;
+  return getPaths(result, 0, []);
 }
 
 /**
  * recurse through the string and build up
  * the array of addresses
  */
-export function getPaths(value: string[], index: number, currentPath: string[], paths: string[]) {
+export function getPaths(value: string[], index: number, currentPath: string[]): string[] {
   if (index >= value.length) {
-    paths.push(currentPath.join(''));
-    return;
+    return [currentPath.join('')];
   }
 
   if (value[index] === 'X') {
-    getPaths(value, index + 1, [...currentPath, '0'], paths);
-    getPaths(value, index + 1, [...currentPath, '1'], paths);
+    return [
+      ...getPaths(value, index + 1, [...currentPath, '0']),
+      ...getPaths(value, index + 1, [...currentPath, '1']),
+    ];
   } else {
-    getPaths(value, index + 1, [...currentPath, value[index]], paths);
+    return [...getPaths(value, index + 1, [...currentPath, value[index]])];
   }
 }
 
