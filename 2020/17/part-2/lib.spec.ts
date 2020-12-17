@@ -5,23 +5,13 @@ describe('2020-12-17.2', () => {
 ..#
 ###`;
 
-  const input2 = `..#....#
-##.#..##
-.###....
-#....#.#
-#.######
-##.#....
-#.......
-.#......`;
-
   it('should calculate 80 neighbours', () => {
     const neighbours = getNeighbours();
     expect(neighbours.length).toBe(80);
   });
 
   it('should calculate cubes after n cycles', () => {
-    let space = parseInput(input2);
-    console.log(space);
+    let space = parseInput(input);
 
     space = getNextCycle(space);
     space = getNextCycle(space);

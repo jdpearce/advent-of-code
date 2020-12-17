@@ -44,8 +44,6 @@ describe('2020-12-17.1', () => {
   it('should calculate active correctly', () => {
     const space = parseInput(input);
 
-    console.log(space.cubeMap);
-
     expect(isActive([1, 0, 0], space.cubeMap)).toBe(true);
     expect(isActive([2, 1, 0], space.cubeMap)).toBe(true);
     expect(isActive([0, 2, 0], space.cubeMap)).toBe(true);
