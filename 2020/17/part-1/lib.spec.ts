@@ -10,16 +10,7 @@ describe('2020-12-17.1', () => {
     expect(space).toEqual({
       max: [3, 3, 1],
       min: [-1, -1, -1],
-      cubeMap: new Map<number, Map<number, Set<number>>>([
-        [
-          0,
-          new Map<number, Set<number>>([
-            [0, new Set<number>([1])],
-            [1, new Set<number>([2])],
-            [2, new Set<number>([0, 1, 2])],
-          ]),
-        ],
-      ]),
+      cubeMap: new Set<string>(['1,0,0', '2,1,0', '0,2,0', '1,2,0', '2,2,0']),
     });
   });
 
@@ -53,11 +44,13 @@ describe('2020-12-17.1', () => {
   it('should calculate active correctly', () => {
     const space = parseInput(input);
 
-    expect(isActive(1, 0, 0, space.cubeMap)).toBe(true);
-    expect(isActive(2, 1, 0, space.cubeMap)).toBe(true);
-    expect(isActive(0, 2, 0, space.cubeMap)).toBe(true);
-    expect(isActive(1, 2, 0, space.cubeMap)).toBe(true);
-    expect(isActive(2, 2, 0, space.cubeMap)).toBe(true);
+    console.log(space.cubeMap);
+
+    expect(isActive([1, 0, 0], space.cubeMap)).toBe(true);
+    expect(isActive([2, 1, 0], space.cubeMap)).toBe(true);
+    expect(isActive([0, 2, 0], space.cubeMap)).toBe(true);
+    expect(isActive([1, 2, 0], space.cubeMap)).toBe(true);
+    expect(isActive([2, 2, 0], space.cubeMap)).toBe(true);
   });
 
   it('should calculate cubes after n cycles', () => {

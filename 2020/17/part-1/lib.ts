@@ -30,14 +30,14 @@ const neighbours = [
 export interface Space {
   max: [number, number, number];
   min: [number, number, number];
-  cubeMap: Map<number, Map<number, Set<number>>>;
+  cubeMap: Set<string>;
 }
 
 export function parseInput(input: string): Space {
   const space: Space = {
     max: [0, 0, 0],
     min: [0, 0, 0],
-    cubeMap: new Map<number, Map<number, Set<number>>>(),
+    cubeMap: new Set<string>(),
   };
 
   const lines = input.split('\n').filter((x) => x);
@@ -48,7 +48,7 @@ export function parseInput(input: string): Space {
     xmax = lines[y].length;
     for (let x = 0; x < lines[y].length; x++) {
       if (lines[y][x] === '#') {
-        setPoint(x, y, z, space.cubeMap, true);
+        space.cubeMap.add([x, y, z].toString());
       }
     }
   }
@@ -58,53 +58,20 @@ export function parseInput(input: string): Space {
   return space;
 }
 
-export function isActive(
-  x: number,
-  y: number,
-  z: number,
-  map: Map<number, Map<number, Set<number>>>
-): boolean {
-  if (!map.get(z)) {
-    map.set(z, new Map<number, Set<number>>());
-  }
-
-  const yspace = map.get(z);
-
-  if (!yspace.get(y)) {
-    yspace.set(y, new Set<number>());
-  }
-
-  const xspace = yspace.get(y);
-  return xspace.has(x);
+export function isActive(coord: [number, number, number], map: Set<string>): boolean {
+  return map.has(coord.toString());
 }
 
-export function setPoint(
-  x: number,
-  y: number,
-  z: number,
-  map: Map<number, Map<number, Set<number>>>,
-  active: boolean
-) {
-  if (!map.get(z)) {
-    map.set(z, new Map<number, Set<number>>());
-  }
-
-  const yspace = map.get(z);
-
-  if (!yspace.get(y)) {
-    yspace.set(y, new Set<number>());
-  }
-
-  const xspace = yspace.get(y);
+export function setPoint(coord: [number, number, number], map: Set<string>, active: boolean) {
   if (active) {
-    xspace.add(x);
+    map.add(coord.toString());
   } else {
-    xspace.delete(x);
+    map.delete(coord.toString());
   }
 }
 
 export function getNextCycle(space: Space): Space {
-  const next = new Map<number, Map<number, Set<number>>>();
+  const next = new Set<string>();
   const [xmax, ymax, zmax] = space.max;
   const [xmin, ymin, zmin] = space.min;
 
@@ -118,14 +85,14 @@ export function getNextCycle(space: Space): Space {
         for (const [dz, dy, dx] of neighbours) {
           const [z1, y1, x1] = [z + dz, y + dy, x + dx];
 
-          activeNeighbours += isActive(x1, y1, z1, space.cubeMap) ? 1 : 0;
+          activeNeighbours += isActive([x1, y1, z1], space.cubeMap) ? 1 : 0;
 
           if (activeNeighbours > 3) {
             break;
           }
         }
 
-        let active = isActive(x, y, z, space.cubeMap);
+        let active = isActive([x, y, z], space.cubeMap);
         if (active) {
           if (activeNeighbours < 2 || activeNeighbours > 3) {
             active = false;
@@ -136,7 +103,7 @@ export function getNextCycle(space: Space): Space {
           }
         }
 
-        setPoint(x, y, z, next, active);
+        setPoint([x, y, z], next, active);
 
         if (active) {
           // update maxes
@@ -172,14 +139,8 @@ export function getNextCycle(space: Space): Space {
   };
 }
 
-export function countCubes(map: Map<number, Map<number, Set<number>>>): number {
-  let size = 0;
-  for (const z of map.values()) {
-    for (const y of z.values()) {
-      size += y.size;
-    }
-  }
-  return size;
+export function countCubes(map: Set<string>): number {
+  return map.size;
 }
 
 export function cubeToLayers(space: Space): string[] {
@@ -191,7 +152,7 @@ export function cubeToLayers(space: Space): string[] {
     for (let y = ymin; y <= ymax; y++) {
       const line = [];
       for (let x = xmin; x <= xmax; x++) {
-        line.push(isActive(x, y, z, space.cubeMap) ? '#' : '.');
+        line.push(isActive([x, y, z], space.cubeMap) ? '#' : '.');
       }
       grid.push(line.join(''));
     }
