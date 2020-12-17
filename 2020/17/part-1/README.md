@@ -21,10 +21,11 @@ The engineers responsible for this experimental energy source would like you to 
 
 For example, consider the following initial state:
 
+```
 .#.
 ..#
-
 ###
+```
 
 Even though the pocket dimension is 3-dimensional, this initial state represents a small 2-dimensional slice of it. (In particular, this initial state defines a 3x3x1 region of the 3-dimensional space.)
 
@@ -32,14 +33,16 @@ Simulating a few cycles from this initial state produces the following configura
 
 Before any cycles:
 
+```
 z=0
 .#.
 ..#
-
 ###
+```
 
 After 1 cycle:
 
+```
 z=-1
 #..
 ..#
@@ -54,9 +57,11 @@ z=1
 #..
 ..#
 .#.
+```
 
 After 2 cycles:
 
+```
 z=-2
 .....
 .....
@@ -91,9 +96,11 @@ z=2
 ..#..
 .....
 .....
+```
 
 After 3 cycles:
 
+```
 z=-2
 .......
 .......
@@ -138,6 +145,7 @@ z=2
 .......
 .......
 .......
+```
 
 After the full six-cycle boot process completes, 112 cubes are left in the active state.
 

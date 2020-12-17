@@ -1,4 +1,4 @@
-import { calculateCubes, parseInput } from './lib';
+import { countCubes, cubeToLayers, getNextCycle, isActive, parseInput } from './lib';
 
 describe('2020-12-17.1', () => {
   const input = `.#.
@@ -7,20 +7,88 @@ describe('2020-12-17.1', () => {
 
   it('should parse input to cubes', () => {
     const space = parseInput(input);
-    console.log(space.cubeMap);
     expect(space).toEqual({
       max: [3, 3, 1],
-      cubeMap: [
+      min: [-1, -1, -1],
+      cubeMap: new Map<number, Map<number, Set<number>>>([
         [
-          [0, 1, 0],
-          [0, 0, 1],
-          [1, 1, 1],
+          0,
+          new Map<number, Set<number>>([
+            [0, new Set<number>([1])],
+            [1, new Set<number>([2])],
+            [2, new Set<number>([0, 1, 2])],
+          ]),
         ],
-      ],
+      ]),
     });
   });
 
+  it('should count cubes correctly', () => {
+    const space = parseInput(input);
+
+    expect(countCubes(space.cubeMap)).toBe(5);
+  });
+
+  it('should stringify the layers correctly', () => {
+    const space = parseInput(input);
+
+    const layers = cubeToLayers(space);
+
+    const empty = `.....
+.....
+.....
+.....
+.....`;
+
+    expect(layers.length).toBe(3);
+    expect(layers[0]).toEqual(empty);
+    expect(layers[1]).toEqual(`.....
+..#..
+...#.
+.###.
+.....`);
+    expect(layers[2]).toEqual(empty);
+  });
+
+  it('should calculate active correctly', () => {
+    const space = parseInput(input);
+
+    expect(isActive(1, 0, 0, space.cubeMap)).toBe(true);
+    expect(isActive(2, 1, 0, space.cubeMap)).toBe(true);
+    expect(isActive(0, 2, 0, space.cubeMap)).toBe(true);
+    expect(isActive(1, 2, 0, space.cubeMap)).toBe(true);
+    expect(isActive(2, 2, 0, space.cubeMap)).toBe(true);
+  });
+
   it('should calculate cubes after n cycles', () => {
-    expect(calculateCubes(input, 6)).toBe(112);
+    let space = parseInput(input);
+    space = getNextCycle(space);
+
+    expect(countCubes(space.cubeMap)).toEqual(11);
+
+    let layers = cubeToLayers(space);
+    expect(layers[1]).toEqual(`.....
+.#...
+...#.
+..#..
+.....`);
+
+    space = getNextCycle(space);
+    layers = cubeToLayers(space);
+    expect(layers[2]).toEqual(`.......
+...#...
+..#..#.
+.....#.
+..#....
+.......
+.......`);
+
+    // 3, 4, 5, 6
+    space = getNextCycle(space);
+    space = getNextCycle(space);
+    space = getNextCycle(space);
+    space = getNextCycle(space);
+
+    expect(countCubes(space.cubeMap)).toBe(112);
   });
 });
