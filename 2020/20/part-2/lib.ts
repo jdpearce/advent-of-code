@@ -223,6 +223,7 @@ const searchSpace = [
 
 /**
  * Assumes the correct orientation has monsters
+ * and that it only ever has *whole* monsters.
  * @param image
  */
 export function getCorrectOrientation(
