@@ -112,10 +112,12 @@ Tile 3079:
   it('should parse the tiles correctly', () => {
     const tiles = parseTiles(input);
     expect(tiles.length).toBe(9);
-    expect(tiles[8]).toEqual({
-      id: 3079,
-      edges: ['#.#.#####.', '.#....#...', '..#.###...', '#..##.#...'],
-    });
+    expect(tiles[8]).toEqual(
+      expect.objectContaining({
+        id: 3079,
+        edges: ['#.#.#####.', '.#....#...', '...###.#..', '...#.##..#'],
+      })
+    );
 
     // tile 3079 should match an edge with tile 2473
     expect(tiles[8].edges.some((x) => tiles[6].edges.includes(x)));

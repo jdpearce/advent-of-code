@@ -12,7 +12,7 @@ populateMatches(tiles);
 const corners = tiles.filter((x) => x.matches.length === 2);
 
 console.log(
-  `With luck there are ${corners.length} corners with the product ${corners.reduce(
+  `With luck there are ${corners.length} (4?) corners with the product ${corners.reduce(
     (acc, curr) => (acc *= curr.id),
     1
   )}`

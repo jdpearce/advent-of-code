@@ -1,12 +1,13 @@
 export enum Direction {
-  North,
-  East,
-  South,
-  West,
+  North = 0,
+  East = 1,
+  South = 2,
+  West = 3,
 }
 
 export interface Tile {
   id: number;
+  content: string[];
   edges: string[];
   matches?: Tile[];
 }
@@ -29,12 +30,19 @@ export function parseTiles(input: string): Tile[] {
     const west: string[] = [];
     for (let i = 1; i < lines.length; i++) {
       east.push(lines[i][last]);
-      west.push(lines[i][0]);
+      west.unshift(lines[i][0]);
     }
 
     tiles.push({
       id,
-      edges: [lines[1], east.join(''), lines[lines.length - 1], west.join('')],
+      content: lines.reduce((acc, curr, i) => {
+        if (i < 2 || i === lines.length - 1) {
+          return acc;
+        }
+        acc.push(curr.slice(1, last));
+        return acc;
+      }, []),
+      edges: [lines[1], east.join(''), reverse(lines[lines.length - 1]), west.join('')],
     });
   }
 
