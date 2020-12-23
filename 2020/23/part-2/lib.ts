@@ -1,6 +1,6 @@
 export interface Game {
   current: number;
-  next: { [x: number]: number };
+  next: number[];
   round: number;
 }
 
@@ -10,7 +10,7 @@ export interface Game {
  */
 export function parseInput(input: string): Game {
   const cups = input.split('').map(Number);
-  const next = {};
+  const next = new Array(1e6 + 1);
 
   let current = cups[0];
   for (let i = 1; i < 1e6; i++) {
