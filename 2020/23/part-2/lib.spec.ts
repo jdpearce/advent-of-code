@@ -5,7 +5,7 @@ describe('2020-12-23.2', () => {
 
   it('should be able to parse the input', () => {
     const game = parseInput(input);
-    expect(game.next.size).toBe(1e6);
+    expect(Object.keys(game.next).length).toBe(1e6);
   });
 
   it('should be able to play a really big game', () => {

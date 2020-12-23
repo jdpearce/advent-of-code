@@ -1,6 +1,6 @@
 export interface Game {
   current: number;
-  next: Map<number, number>;
+  next: { [x: number]: number };
   round: number;
 }
 
@@ -10,15 +10,15 @@ export interface Game {
  */
 export function parseInput(input: string): Game {
   const cups = input.split('').map(Number);
-  const next = new Map<number, number>();
+  const next = {};
 
   let current = cups[0];
   for (let i = 1; i < 1e6; i++) {
     const nextValue = i < cups.length ? cups[i] : i + 1;
-    next.set(current, nextValue);
+    next[current] = nextValue;
     current = nextValue;
   }
-  next.set(current, cups[0]);
+  next[current] = cups[0];
 
   return {
     current: cups[0],
@@ -30,12 +30,12 @@ export function parseInput(input: string): Game {
 export function playRound(game: Game) {
   // pick up three cups clockwise from current
   // get the indices of those three cups:
-  const a = game.next.get(game.current);
-  const b = game.next.get(a);
-  const c = game.next.get(b);
+  const a = game.next[game.current];
+  const b = game.next[a];
+  const c = game.next[b];
 
   // take them out of the list
-  game.next.set(game.current, game.next.get(c));
+  game.next[game.current] = game.next[c];
 
   const set = new Set<number>([a, b, c]);
 
@@ -43,7 +43,7 @@ export function playRound(game: Game) {
   let destination = game.current - 1;
   while (true) {
     if (destination === 0) {
-      destination = game.next.size;
+      destination = Object.keys(game.next).length;
       continue;
     }
 
@@ -56,10 +56,10 @@ export function playRound(game: Game) {
   }
 
   // find the destination and insert the picked up cups
-  game.next.set(c, game.next.get(destination));
-  game.next.set(destination, a);
+  game.next[c] = game.next[destination];
+  game.next[destination] = a;
 
-  game.current = game.next.get(game.current);
+  game.current = game.next[game.current];
   game.round += 1;
 }
 
@@ -68,5 +68,5 @@ export function playGame(game: Game, rounds: number): [number, number] {
     playRound(game);
   }
 
-  return [game.next.get(1), game.next.get(game.next.get(1))];
+  return [game.next[1], game.next[game.next[1]]];
 }
