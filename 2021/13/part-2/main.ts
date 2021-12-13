@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { foldGrid, getPointsAndFolds, prettyPrintPoints } from '../part-1/lib';
 
-const input = fs.readFileSync(path.join(__dirname, '../input.txt')).toString();
+const input = fs.readFileSync(path.join(__dirname, '../big_input.txt')).toString();
 
 const [points, folds] = getPointsAndFolds(input);
 

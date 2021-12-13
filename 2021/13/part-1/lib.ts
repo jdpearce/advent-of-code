@@ -61,22 +61,23 @@ export function prettyPrintPoints(points: Point[]): string {
   const grid: string[][] = [];
   let maxY = 0;
   let maxX = 0;
+
   for (const [x, y] of points) {
     if (!grid[y]) {
       grid[y] = [];
     }
-    grid[y][x] = '#';
+    grid[y][x] = '█';
     maxY = y > maxY ? y : maxY;
     maxX = x > maxX ? x : maxX;
   }
-  console.log(grid.length);
+
   for (let y = 0; y < maxY + 1; y++) {
     if (!grid[y]) {
       grid[y] = [];
     }
     for (let x = 0; x < maxX + 1; x++) {
       if (!grid[y][x]) {
-        grid[y][x] = '.';
+        grid[y][x] = ' ';
       }
     }
   }
