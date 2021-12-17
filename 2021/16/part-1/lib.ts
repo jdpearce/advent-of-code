@@ -67,6 +67,9 @@ export function readPacket(input: string[], pointer: number): [Packet, number] {
   return [packet, pointer];
 }
 
+/**
+ * Reads a number of the length given from the input and returns the new pointer
+ */
 export function readNumber(input: string[], pointer: number, length: number): [number, number] {
   return [toNumber(input.slice(pointer, pointer + length)), pointer + length];
 }
