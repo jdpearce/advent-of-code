@@ -1,10 +1,10 @@
-import { magnitude, parsePairOrNumber, reduceSnailNumber } from '../part-1/lib';
+import { magnitude, PairOrNumber, reduceSnailNumber } from '../part-1/lib';
 
 export function getLargestMagnitudeSum(input: string): number {
   const snailNumbers = input
     .split('\n')
     .filter((l) => !!l)
-    .map((line) => parsePairOrNumber(JSON.parse(line)));
+    .map((line) => JSON.parse(line) as PairOrNumber);
 
   let largest = 0;
 
@@ -13,7 +13,7 @@ export function getLargestMagnitudeSum(input: string): number {
       if (x === y) {
         continue;
       }
-      const m = magnitude(reduceSnailNumber({ left: snailNumbers[x], right: snailNumbers[y] }));
+      const m = magnitude(reduceSnailNumber([snailNumbers[x], snailNumbers[y]]));
       if (m > largest) {
         largest = m;
       }

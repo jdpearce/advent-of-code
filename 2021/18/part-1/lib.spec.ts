@@ -4,7 +4,6 @@ import {
   addSnailNumbers,
   explodePairOrNumber,
   magnitude,
-  parsePairOrNumber,
   printPairOrNumber,
   reduceSnailNumber,
   splitPairOrNumber,
@@ -13,77 +12,64 @@ import {
 describe('2021-12-18.1', () => {
   it('should parse and the print', () => {
     const snailNumber = `[[[[1,1],[2,2]],[3,3]],[4,4]]`;
-    const parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    expect(printPairOrNumber(parsed)).toBe(snailNumber);
+    expect(printPairOrNumber(JSON.parse(snailNumber))).toBe(snailNumber);
   });
 
   it('should add left properly', () => {
     let snailNumber = '[1,2]';
-    let parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    let result = addLeft(parsed, 1);
+    let result = addLeft(JSON.parse(snailNumber), 1);
     expect(printPairOrNumber(result)).toBe(`[2,2]`);
 
     snailNumber = '[[1,2],3]';
-    parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    result = addLeft(parsed, 1);
+    result = addLeft(JSON.parse(snailNumber), 1);
     expect(printPairOrNumber(result)).toBe(`[[2,2],3]`);
 
     snailNumber = '[[[1, 2],3],4]';
-    parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    result = addLeft(parsed, 1);
+    result = addLeft(JSON.parse(snailNumber), 1);
     expect(printPairOrNumber(result)).toBe(`[[[2,2],3],4]`);
   });
 
   it('should add right properly', () => {
     let snailNumber = '[1,2]';
-    let parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    let result = addRight(parsed, 1);
+    let result = addRight(JSON.parse(snailNumber), 1);
     expect(printPairOrNumber(result)).toBe(`[1,3]`);
 
     snailNumber = '[1,[2,3]]';
-    parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    result = addRight(parsed, 1);
+    result = addRight(JSON.parse(snailNumber), 1);
     expect(printPairOrNumber(result)).toBe(`[1,[2,4]]`);
 
     snailNumber = '[1,[2,[3,4]]]';
-    parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    result = addRight(parsed, 1);
+    result = addRight(JSON.parse(snailNumber), 1);
     expect(printPairOrNumber(result)).toBe(`[1,[2,[3,5]]]`);
   });
 
   it('should explode a number properly', () => {
     let snailNumber = `[[[[[9,8],1],2],3],4]`;
-    let parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    let [exploded, left, right, result] = explodePairOrNumber(parsed);
+    let [exploded, left, right, result] = explodePairOrNumber(JSON.parse(snailNumber));
     expect(printPairOrNumber(result)).toBe(`[[[[0,9],2],3],4]`);
 
     snailNumber = `[7,[6,[5,[4,[3,2]]]]]`;
-    parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    [exploded, left, right, result] = explodePairOrNumber(parsed);
+    [exploded, left, right, result] = explodePairOrNumber(JSON.parse(snailNumber));
     expect(printPairOrNumber(result)).toBe(`[7,[6,[5,[7,0]]]]`);
 
     snailNumber = `[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]`;
-    parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    [exploded, left, right, result] = explodePairOrNumber(parsed);
+    [exploded, left, right, result] = explodePairOrNumber(JSON.parse(snailNumber));
     expect(printPairOrNumber(result)).toBe(`[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]`);
   });
 
   it('should split a number properly', () => {
     let snailNumber = `[[[[0,7],4],[15,[0,13]]],[1,1]]`;
-    let parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    let [splitted, result] = splitPairOrNumber(parsed);
+    let [splitted, result] = splitPairOrNumber(JSON.parse(snailNumber));
     expect(printPairOrNumber(result)).toBe(`[[[[0,7],4],[[7,8],[0,13]]],[1,1]]`);
 
     snailNumber = `[[[[0,7],4],[[7,8],[0,13]]],[1,1]]`;
-    parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    [splitted, result] = splitPairOrNumber(parsed);
+    [splitted, result] = splitPairOrNumber(JSON.parse(snailNumber));
     expect(printPairOrNumber(result)).toBe(`[[[[0,7],4],[[7,8],[0,[6,7]]]],[1,1]]`);
   });
 
   it('should reduce a number properly', () => {
     let snailNumber = `[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]`;
-    let parsed = parsePairOrNumber(JSON.parse(snailNumber));
-    let result = reduceSnailNumber(parsed);
+    let result = reduceSnailNumber(JSON.parse(snailNumber));
     expect(printPairOrNumber(result)).toBe(`[[[[0,7],4],[[7,8],[6,0]]],[8,1]]`);
   });
 
@@ -104,13 +90,13 @@ describe('2021-12-18.1', () => {
 
   it('should calculate the magnitude', () => {
     let input = `[[1,2],[[3,4],5]]`;
-    expect(magnitude(parsePairOrNumber(JSON.parse(input)))).toBe(143);
+    expect(magnitude(JSON.parse(input))).toBe(143);
 
     input = `[[[[0,7],4],[[7,8],[6,0]]],[8,1]]`;
-    expect(magnitude(parsePairOrNumber(JSON.parse(input)))).toBe(1384);
+    expect(magnitude(JSON.parse(input))).toBe(1384);
 
     input = `[[[[8,7],[7,7]],[[8,6],[7,7]]],[[[0,7],[6,6]],[8,7]]]`;
-    expect(magnitude(parsePairOrNumber(JSON.parse(input)))).toBe(3488);
+    expect(magnitude(JSON.parse(input))).toBe(3488);
   });
 
   it('should work on a homework problem', () => {

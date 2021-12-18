@@ -1,138 +1,92 @@
-interface Pair {
-  left?: number | Pair;
-  right?: number | Pair;
-}
+export type PairOrNumber = [PairOrNumber, PairOrNumber] | number;
 
-export function parsePairOrNumber(element: any[] | Number, parent?: Pair): Pair | number {
-  if (element instanceof Array) {
-    let [left, right] = element;
-    let pair: Pair = {};
-    pair.left = parsePairOrNumber(left, pair);
-    pair.right = parsePairOrNumber(right, pair);
-    return pair;
-  }
-  return Number(element);
-}
-
-export function printPairOrNumber(pairOrNumber: Pair | number): string {
+export function printPairOrNumber(pairOrNumber: PairOrNumber): string {
   if (pairOrNumber instanceof Object) {
-    return `[${printPairOrNumber(pairOrNumber.left)},${printPairOrNumber(pairOrNumber.right)}]`;
+    const [left, right] = pairOrNumber;
+    return `[${printPairOrNumber(left)},${printPairOrNumber(right)}]`;
   }
   return pairOrNumber.toString();
 }
 
-export function addLeft(pairOrNumber: Pair | number, number: number): Pair | number {
-  if (!number) {
+/**
+ * Given a tree (pairOrNumber) this walks down the LEFT hand side
+ * and adds toAdd to the first number it finds
+ */
+export function addLeft(pairOrNumber: PairOrNumber, toAdd: number): PairOrNumber {
+  if (!toAdd) {
     return pairOrNumber;
   }
 
   if (pairOrNumber instanceof Object) {
-    return {
-      left: addLeft(pairOrNumber.left, number),
-      right: pairOrNumber.right,
-    };
+    const [left, right] = pairOrNumber;
+    return [addLeft(left, toAdd), right] as PairOrNumber;
   } else {
-    return pairOrNumber + number;
+    return pairOrNumber + toAdd;
   }
 }
 
-export function addRight(pairOrNumber: Pair | number, number: number): Pair | number {
-  if (!number) {
+/**
+ * Given a tree (pairOrNumber) this walks down the RIGHT hand side
+ * and adds toAdd to the first number it finds
+ */
+export function addRight(pairOrNumber: PairOrNumber, toAdd: number): PairOrNumber {
+  if (!toAdd) {
     return pairOrNumber;
   }
 
   if (pairOrNumber instanceof Object) {
-    return {
-      left: pairOrNumber.left,
-      right: addRight(pairOrNumber.right, number),
-    };
+    const [left, right] = pairOrNumber;
+    return [left, addRight(right, toAdd)] as PairOrNumber;
   } else {
-    return pairOrNumber + number;
+    return pairOrNumber + toAdd;
   }
 }
 
 export function explodePairOrNumber(
-  pairOrNumber: Pair | number,
+  pairOrNumber: PairOrNumber,
   depth: number = 0
-): [boolean, number | undefined, number | undefined, Pair | number] {
+): [boolean, number | undefined, number | undefined, PairOrNumber] {
   if (pairOrNumber instanceof Object) {
+    const [left, right] = pairOrNumber;
     if (depth === 4) {
-      return [true, pairOrNumber.left as number, pairOrNumber.right as number, 0];
+      return [true, left as number, right as number, 0];
     }
 
-    let [exploded, left, right, pair] = explodePairOrNumber(pairOrNumber.left, depth + 1);
+    let [exploded, explodeLeft, explodeRight, pair] = explodePairOrNumber(left, depth + 1);
     if (exploded) {
-      return [
-        true,
-        left,
-        undefined,
-        {
-          right: addLeft(pairOrNumber.right, right),
-          left: pair,
-        },
-      ];
+      return [true, explodeLeft, undefined, [pair, addLeft(right, explodeRight)]];
     }
 
-    [exploded, left, right, pair] = explodePairOrNumber(pairOrNumber.right, depth + 1);
+    [exploded, explodeLeft, explodeRight, pair] = explodePairOrNumber(right, depth + 1);
     if (exploded) {
-      return [
-        true,
-        undefined,
-        right,
-        {
-          left: addRight(pairOrNumber.left, left),
-          right: pair,
-        },
-      ];
+      return [true, undefined, explodeRight, [addRight(left, explodeLeft), pair]];
     }
-
-    return [false, undefined, undefined, pairOrNumber];
-  } else {
-    return [false, undefined, undefined, pairOrNumber];
   }
+
+  return [false, undefined, undefined, pairOrNumber];
 }
 
-export function splitPairOrNumber(pairOrNumber: Pair | number): [boolean, Pair | number] {
+export function splitPairOrNumber(pairOrNumber: PairOrNumber): [boolean, PairOrNumber] {
   if (pairOrNumber instanceof Object) {
-    let [splitted, pair] = splitPairOrNumber(pairOrNumber.left);
+    const [left, right] = pairOrNumber;
+
+    let [splitted, pair] = splitPairOrNumber(left);
     if (splitted) {
-      return [
-        true,
-        {
-          left: pair,
-          right: pairOrNumber.right,
-        },
-      ];
+      return [true, [pair, right]];
     }
 
-    [splitted, pair] = splitPairOrNumber(pairOrNumber.right);
+    [splitted, pair] = splitPairOrNumber(right);
     if (splitted) {
-      return [
-        true,
-        {
-          left: pairOrNumber.left,
-          right: pair,
-        },
-      ];
+      return [true, [left, pair]];
     }
-
-    return [false, pairOrNumber];
-  } else {
-    if (pairOrNumber >= 10) {
-      return [
-        true,
-        {
-          left: Math.floor(pairOrNumber / 2),
-          right: Math.ceil(pairOrNumber / 2),
-        },
-      ];
-    } else {
-      return [false, pairOrNumber];
-    }
+  } else if (pairOrNumber >= 10) {
+    return [true, [Math.floor(pairOrNumber / 2), Math.ceil(pairOrNumber / 2)]];
   }
+
+  return [false, pairOrNumber];
 }
 
-export function reduceSnailNumber(pairOrNumber: Pair | number): Pair | number {
+export function reduceSnailNumber(pairOrNumber: PairOrNumber): PairOrNumber {
   let changes = true;
   while (changes) {
     [changes, , , pairOrNumber] = explodePairOrNumber(pairOrNumber);
@@ -145,23 +99,24 @@ export function reduceSnailNumber(pairOrNumber: Pair | number): Pair | number {
   return pairOrNumber;
 }
 
-export function addSnailNumbers(input: string): Pair | number {
+export function addSnailNumbers(input: string): PairOrNumber {
   const snailNumbers = input
     .split('\n')
     .filter((l) => !!l)
-    .map((line) => parsePairOrNumber(JSON.parse(line)));
+    .map((line) => JSON.parse(line));
 
-  let result: Pair | number = snailNumbers[0];
+  let result: PairOrNumber = snailNumbers[0];
   for (let i = 1; i < snailNumbers.length; i++) {
-    result = reduceSnailNumber({ left: result, right: snailNumbers[i] });
+    result = reduceSnailNumber([result, snailNumbers[i]]);
   }
 
   return result;
 }
 
-export function magnitude(pairOrNumber: Pair | number): number {
+export function magnitude(pairOrNumber: PairOrNumber): number {
   if (pairOrNumber instanceof Object) {
-    return 3 * magnitude(pairOrNumber.left) + 2 * magnitude(pairOrNumber.right);
+    const [left, right] = pairOrNumber;
+    return 3 * magnitude(left) + 2 * magnitude(right);
   } else {
     return pairOrNumber;
   }
