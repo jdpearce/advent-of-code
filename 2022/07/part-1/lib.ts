@@ -5,51 +5,58 @@ export interface Dir {
   dirs: string[];
 }
 
-export function sumDirsWithSizeAtMost(input: string, atMostSize: number): number {
-  const lines = input.split('\n').filter((x) => x);
-
+export function buildDirMap(input: string): Map<string, Dir> {
   const dirs = new Map<string, Dir>();
   let currentDirName: string[] = ['/'];
   let readingDir = false;
   dirs.set(currentDirName[currentDirName.length - 1], { name: '/', files: [], dirs: [] } as Dir);
-  lines.forEach((line) => {
-    if (readingDir && line.startsWith('$')) {
-      readingDir = false;
-    }
-
-    if (line.startsWith('$ cd ')) {
-      const command = line.substring(5);
-      if (command === '..') {
-        currentDirName.pop();
-      } else if (command === '/') {
-        currentDirName = ['/'];
-      } else {
-        currentDirName.push(command);
+  input
+    .split('\n')
+    .filter((x) => x)
+    .forEach((line) => {
+      if (readingDir && line.startsWith('$')) {
+        readingDir = false;
       }
+
+      if (line.startsWith('$ cd ')) {
+        const command = line.substring(5);
+        if (command === '..') {
+          currentDirName.pop();
+        } else if (command === '/') {
+          currentDirName = ['/'];
+        } else {
+          currentDirName.push(command);
+        }
+        const name = currentDirName.join('/');
+        // console.log(`current directory is ${name}`);
+        if (!dirs.has(name)) {
+          dirs.set(name, { name, files: [], dirs: [] } as Dir);
+        }
+        return;
+      }
+
+      if (line.startsWith('$ ls')) {
+        readingDir = true;
+        return;
+      }
+
       const name = currentDirName.join('/');
-      // console.log(`current directory is ${name}`);
-      if (!dirs.has(name)) {
-        dirs.set(name, { name, files: [], dirs: [] } as Dir);
+      const dir = dirs.get(name);
+
+      if (line.startsWith('dir')) {
+        dir.dirs.push(name + '/' + line.split(' ')[1]);
+        return;
       }
-      return;
-    }
 
-    if (line.startsWith('$ ls')) {
-      readingDir = true;
-      return;
-    }
+      // console.log(`Processing line: ${line}`);
+      dir.files.push(line);
+    });
 
-    const name = currentDirName.join('/');
-    const dir = dirs.get(name);
+  return dirs;
+}
 
-    if (line.startsWith('dir')) {
-      dir.dirs.push(name + '/' + line.split(' ')[1]);
-      return;
-    }
-
-    // console.log(`Processing line: ${line}`);
-    dir.files.push(line);
-  });
+export function sumDirsWithSizeAtMost(input: string, atMostSize: number): number {
+  const dirs = buildDirMap(input);
 
   let total = 0;
   for (const name of dirs.keys()) {
